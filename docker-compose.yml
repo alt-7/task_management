@@ -1,0 +1,35 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        container_name: task_management
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./:/var/www/app
+        depends_on:
+            - database
+        environment:
+            APP_ENV: ${APP_ENV}
+            APP_SECRET: ${APP_SECRET}
+            DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?serverVersion=16&charset=utf8
+        command: >
+            sh -c "composer install --no-interaction &&
+                   composer dump-autoload --optimize &&
+                   php -S 0.0.0.0:8000 -t public"
+
+    database:
+        image: postgres:16-alpine
+        container_name: task_management_db
+        environment:
+            POSTGRES_DB: ${DB_NAME}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        ports:
+            - "${DB_PORT}:5432"
+        volumes:
+            - task_management_postgres_data:/var/lib/postgresql/data
+
+volumes:
+    task_management_postgres_data:
