@@ -1,0 +1,151 @@
+{
+  "info": {
+    "_postman_id": "eabc2d53-fa14-4356-b005-150000a652b5",
+    "name": "Task Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Get Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/login",
+          "host": ["{{base_url}}"],
+          "path": ["api", "login"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let data = pm.response.json();",
+              "if (data.token) {",
+              "  pm.environment.set(\"token\", data.token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get All Tasks",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/tasks",
+          "host": ["{{base_url}}"],
+          "path": ["api", "tasks"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Task",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"task 2\",\n  \"description\": \"task 2 description\",\n  \"status\": \"in_progress\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/tasks",
+          "host": ["{{base_url}}"],
+          "path": ["api", "tasks"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Task By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/tasks/1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "tasks", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Task",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"updated task\",\n  \"description\": \"updated description\",\n  \"status\": \"done\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/tasks/1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "tasks", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Task",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/tasks/1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "tasks", "1"]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -29,6 +29,9 @@ docker compose exec app sh
 # Применить миграции
 docker compose exec php bin/console doctrine:migrations:migrate
 
+# Очистить кеш
+php bin/console cache:clear
+
 # Запуск тесты
 vendor/bin/phpunit
  
@@ -38,11 +41,12 @@ php bin/console app:create-user test@example.com password123
 # Генерация JWT ключей
 mkdir -p config/jwt
 php bin/console lexik:jwt:generate-keypair
-openssl genrsa -out config/jwt/private.pem -aes256 4096
-openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
 
 # Указать фразу-пароль в .env
 echo "JWT_PASSPHRASE=your_passphrase" >> .env
+
+# В корне проекта лежит Postman коллекция
+Task_management_API.postman_collection.json
 
 # Получить токен
 POST /api/login
